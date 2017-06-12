@@ -1,11 +1,14 @@
 ## Projeto do grupo *Neoway 2*
 
+#### Pip
+`pip install -r requirements.txt`
+
 #### Django
 Versão 1.11.2
 
 Para rodar o Django, entre na pasta do repositório(```novo-caminho/```) e use:
 
- ```python manage.py runserver```
+`python manage.py runserver`
 
 #### MongoDB
 Example:

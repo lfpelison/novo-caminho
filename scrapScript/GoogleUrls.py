@@ -9,7 +9,8 @@ class UrlgoogleSpider(scrapy.Spider):
   name = "urlgoogle"
 
   #__init__ method receives *args and **kwargs
-  def __init__(self, *args, **kwargs):
+  def __init__(self, pages, *args, **kwargs):
+    self.pages = pages
     #get all args in a list format
     self.searchKeys = list(args)
     #init allowed_domains
@@ -20,13 +21,16 @@ class UrlgoogleSpider(scrapy.Spider):
 
   def make_urls(self):
     #Format the first part of the url
-    requestString = "http://" + self.allowed_domains + "/search?q="
+    MainUrl = "http://" + self.allowed_domains + "/search?q="
     #Include all search words in the url following the google sintax
     for key in self.searchKeys:
-      requestString = requestString + key + "+"
+      MainUrl = MainUrl + key + "+"
     #remove the last '+' character and set to news search mode
-    requestString = requestString[:-1] + "&tbm=nws&start=0"
-    self.start_urls.append(requestString)
+    MainUrl = MainUrl[:-1] + "&tbm=nws"
+    #append the selected number of pages to scrap into start_urls
+    for i in range(self.pages):
+      requestString = MainUrl + "&start=" + str(i*10)
+      self.start_urls.append(requestString)
 
   def parse(self, response):
     sel = Selector(response)

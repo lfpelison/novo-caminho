@@ -1,5 +1,8 @@
 ## Projeto do grupo *Neoway 2*
 
+#### Get URLs from Search Engines
+`get_urls(["jose dirceu","PT"], ["google","yahoo"], 3)` retorna um generator das URLs
+
 #### Pip
 `pip install -r requirements.txt`
 

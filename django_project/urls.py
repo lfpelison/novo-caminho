@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from smarturls import surl
 
 urlpatterns = [
-    url(r'^search/', include('search.urls')),
-    url(r'^admin/', admin.site.urls),
+    surl('search/', include('search.urls')),
+    surl('admin/', admin.site.urls),
 ]

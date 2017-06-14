@@ -2,7 +2,6 @@
 
 import requests
 from scrapy.selector import Selector
-search_keys = ('jose dirceu', 'pt')
 
 def get_body(url):
     return requests.get(url).text.encode('utf-8')
@@ -13,7 +12,7 @@ def google_format(s_keys, pages):
 
 def google_parse(body):
     for url in Selector(text=body).xpath("//h3[@class='r']/a/@href").extract():
-        yield url.strip('/url?q=')
+        yield url.strip('/url?q=').split('&sa=U&ved=')[0]
 
 def bing_format(s_keys):    # o search do bing so tem uma pagina
     return "http://www.bing.com/news/search?q={0}".format(s_keys)
@@ -24,7 +23,7 @@ def bing_parse(body):
 
 def yahoo_format(s_keys, pages):
     for i in range(pages):
-        yield "https://br.search.yahoo.com/search?p={0}&b={1}".format(s_keys, i*10-9)
+        yield "https://br.search.yahoo.com/search?p={0}&b={1}".format(s_keys, (i*10)+1)
 def yahoo_parse(body):
     return Selector(text=body).xpath("//ol/li/div/div/h3/a/@href").extract()
 
@@ -46,5 +45,6 @@ def get_urls(s_keys,s_engines,pages):
                 yield news_url
 
 if __name__ == "__main__":
-    for url in get_urls(search_keys, ['google'], 10):
+    search_keys = ['jose dirceu']
+    for url in get_urls((search_keys), ['yahoo'], 1):
         print url

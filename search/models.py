@@ -6,14 +6,6 @@ from django.contrib.auth.models import User
 from django import utils
 from django.utils.encoding import python_2_unicode_compatible
 
-#Change to MongoDB
-#@python_2_unicode_compatible  # only if you need to support Python 2
-#class Article(models.Model):
-#    title = models.CharField(max_length=200)
-#    def __str__(self):
-#        return self.title
-
-
 @python_2_unicode_compatible  # only if you need to support Python 2
 class Query(models.Model):
     name = models.CharField(max_length=200)
@@ -30,11 +22,3 @@ class EntityQuery(models.Model):
 
     def __str__(self):
         return "Entity Name: {0}, Entity ID: {1}, Query: {2}".format(self.name, str(self.id), self.relationQuery.name)
-
-
-#def __getattr__(self, pudim):
-#        if pudim=='articles':
-#            connection.db.select
-
-#entity.articles
-#entity.abc

@@ -32,18 +32,22 @@ def yahoo_parse(body):
 
 def get_urls(s_keys,s_engines,pages):
     s_keys = "+".join((key.replace(' ','+') for key in s_keys))
-    if 'google' in s_engines:
-        for search_url in google_format(s_keys, pages):
-            for news_url in google_parse(get_body(search_url)):
+    try:
+        if 'google' in s_engines:
+            for search_url in google_format(s_keys, pages):
+                for news_url in google_parse(get_body(search_url)):
+                    yield news_url.rsplit("&sa=", 1)[0]
+        if 'bing' in s_engines:
+            search_url = bing_format(s_keys)
+            for news_url in bing_parse(get_body(search_url)):
                 yield news_url
-    if 'bing' in s_engines:
-        search_url = bing_format(s_keys)
-        for news_url in bing_parse(get_body(search_url)):
-            yield news_url
-    if 'yahoo' in s_engines:
-        for search_url in yahoo_format(s_keys, pages):
-            for news_url in yahoo_parse(get_body(search_url)):
-                yield news_url
+        if 'yahoo' in s_engines:
+            for search_url in yahoo_format(s_keys, pages):
+                for news_url in yahoo_parse(get_body(search_url)):
+                    yield news_url
+
+    except requests.exceptions.RequestException as e:
+        print e
 
 if __name__ == "__main__":
     for url in get_urls(search_keys, ['google'], 10):

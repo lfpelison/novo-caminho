@@ -1,2 +1,3 @@
+newspaper
 psycopg2==2.7.1
 Django==1.11.2

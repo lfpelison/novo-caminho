@@ -1,13 +1,27 @@
-{# Muda o template base se o usuário estiver logado ou não #}
-{% extends 'dashboard/base.html' %}
+{# Load the tag library #}
 {% load bootstrap3 %}
 
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
-{% block content %}
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
 
-Seja Bem-Vindo a nosso engine de pesquisas de pessoas malvadinhas. Faça o login!
-<br>
+<body>
+    <div class="page-header">
+        <h1><a href="/">Novo Caminho</a></h1>
+    </div>
+    <div class="content container">
+        <div class="row">
+            <div class="col-md-8">
+              Seja Bem-Vindo a nosso engine de pesquisas de pessoas malvadinhas. Faça o login ou se cadastre
+              <br>
 
-<a href="{% url 'dashboard:login' %}">{% bootstrap_button "Login" button_type="submit" button_class="btn-primary" %}</a>
+              <a href="{% url 'dashboard:login' %}">{% bootstrap_button "Login" button_type="submit" button_class="btn-info" %}</a>
+              <a href="{% url 'dashboard:signup' %}">{% bootstrap_button "Cadastrar" button_type="submit" button_class="btn-primary" %}</a>
 
-{% endblock content %}
+            </div>
+        </div>
+    </div>
+</body>

@@ -9,5 +9,6 @@ app_name = 'dashboard'
 urlpatterns = [
     surl('/', views.index, name='index'),
     surl('login/', auth_views.login, name='login'),
+    surl('logout/', auth_views.logout, {'next_page': '/'}, name='logout'),
     surl('signup/', views.signup, name='signup'),
 ]

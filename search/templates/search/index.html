@@ -1,5 +1,9 @@
+{% extends 'search/base.html' %}
+
+{% block content %}
 <ul>
 {% for url in url_list %}
     <li><a href="{{url}}">{{url}}</a></li>
 {% endfor %}
 </ul>
+{% endblock %}

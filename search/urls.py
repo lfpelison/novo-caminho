@@ -5,7 +5,8 @@ from smarturls import surl
 import api
 
 from . import views
-#app_name = 'search'
+
+app_name = 'search'
 
 urlpatterns = [
     surl('/', views.index, name='index'),

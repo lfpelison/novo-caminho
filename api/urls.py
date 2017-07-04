@@ -3,11 +3,14 @@
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import ArticlesView
+from smarturls import surl
+
+app_name = 'api'
 
 urlpatterns = {
-    url(r'^auth/', include('rest_framework.urls',
+    surl('auth/', include('rest_framework.urls',
         namespace='rest_framework')),
-    url(r'^articles/(?P<entities>.+)/$', ArticlesView.as_view()),
+    surl('articles/(?P<entities>.+)/$', ArticlesView.as_view()),
 }
 
 # Adiciona os sufixos de URL aceitos aos nossos urlpatterns.

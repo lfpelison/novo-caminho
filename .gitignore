@@ -5,5 +5,3 @@ local/
 lib/
 include/
 pip-selfcheck.json
-
-*/migrations/*

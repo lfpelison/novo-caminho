@@ -16,8 +16,9 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from smarturls import surl
-
+from . import main_view
 urlpatterns = [
+    surl('/', main_view.index, name='index'),
     surl('search/', include('search.urls')),
     surl('admin/', admin.site.urls),
 ]

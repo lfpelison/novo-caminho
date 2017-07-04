@@ -46,3 +46,11 @@ Dentro do Shell do MongoDB:
 `> db.createCollection("Article")`
 
 Mongo configurado!!
+
+
+#### API
+To access the articles, go to /api/articles/ and then write the entities names that you want, separated by commas `(',')`. 
+
+* E.g: /api/articles/Lula,Dilma/
+
+You'll just see the responses if you're logged in.

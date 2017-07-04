@@ -5,6 +5,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from .views import ArticlesView
 
 urlpatterns = {
+    url(r'^auth/', include('rest_framework.urls',
+        namespace='rest_framework')),
     url(r'^articles/(?P<entities>.+)/$', ArticlesView.as_view()),
 }
 

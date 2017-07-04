@@ -9,5 +9,5 @@ from . import views
 app_name = 'search'
 
 urlpatterns = [
-    surl('/', views.index, name='index'),
+    surl('/', views.IndexView.as_view(), name='index'),
 ]

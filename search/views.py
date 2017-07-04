@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
-from django.template import loader
-from django.http import HttpResponse
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404
 from news_urls import news_urls
+from django.views import generic, View
 
-def index(request):
-    url_list = news_urls.get_urls( ("jose dirceu"), ('google'), 2)
-    template = loader.get_template('search/index.html')
-    context = {
-        'url_list': url_list,
-    }
-    return HttpResponse(template.render(context, request))
+class IndexView(generic.ListView):
+    template_name = 'search/index.html'
+    context_object_name = 'url_list'
+
+    def get_queryset(self):
+        return news_urls.get_urls( ("jose dirceu"), ('google'), 2)

@@ -5,5 +5,5 @@ from smarturls import surl
 from . import views
 
 urlpatterns = [
-    surl('/', views.index, name='index'),
+    surl('/', views.IndexView.as_view(), name='index'),
 ]

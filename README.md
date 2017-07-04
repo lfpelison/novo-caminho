@@ -4,6 +4,13 @@
 *Faça isso antes de tudo*
 `pip install -r requirements.txt`
 
+#### Heroku
+* Instalar Heroku 6.12.0(IMPORTANTE SER ESSA VERSÃO)
+* Depois de adicionar as changes que tu fez no branch(git add... git commit -m...) Faça:
+* `git push heroku <seu-branch-aqui>:master -f`
+* Esse comando irá apagar o que está no Heroku e colocar com o que está na sua branch. Se pushando do master:
+* `git push heroku master -f`
+
 #### PostgreSQL
 * Install PostgreSQL 9.5
 * `psql postgres`
@@ -25,7 +32,8 @@ local   all             all                                     peer
 #### Get URLs from Search Engines
 `get_urls(["jose dirceu","PT"], ["google","yahoo"], 3)` retorna um generator das URLs
 
-
+#### Pip
+`pip install -r requirements.txt`
 
 #### Django
 Versão 1.11.2

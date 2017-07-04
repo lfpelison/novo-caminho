@@ -41,4 +41,3 @@ class EntityQuery(models.Model):
 
     def __str__(self):
         return "Entity Name: {0}, Entity ID: {1}, Query: {2}".format(self.name, str(self.id), self.relationQuery.name)
-

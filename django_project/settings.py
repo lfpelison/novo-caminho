@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import dj_database_url
-MONGO_DBNAME = 'novo_caminho'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -92,6 +91,14 @@ DATABASES = {
 }
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
+MONGO_DATABASE = {
+    'db':           'novo-caminho',
+    'username':     'caminho_user',
+    'password':     'admin123',
+    'host':         'mongodb://caminho_user:admin123@ds053196.mlab.com:53196/novo-caminho'
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (

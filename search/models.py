@@ -6,9 +6,14 @@ from django import utils
 from django.utils.encoding import python_2_unicode_compatible
 ### MONGO
 import mongoengine as mg
-from django_project.settings import MONGO_DBNAME
+from django_project.settings import MONGO_DATABASE
 
-mg.connect(MONGO_DBNAME)
+mg.connect(
+    db=         MONGO_DATABASE['db'],
+    username=   MONGO_DATABASE['username'],
+    password=   MONGO_DATABASE['password'],
+    host=       MONGO_DATABASE['host'],
+)
 
 @python_2_unicode_compatible
 class Article(mg.Document):

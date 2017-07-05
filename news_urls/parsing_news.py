@@ -21,7 +21,7 @@ def url2features(list_url):
             news_article.parse()
             news_article.nlp()
 
-            yield news_article.summary
+            yield news_article
 
         except etree.XMLSyntaxError:
             print "\n\nBad XML\n\n"

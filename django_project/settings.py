@@ -123,7 +123,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+## If user not connected, redirect to LOGIN_URL
 LOGIN_URL = '/login/'
+## When user connected, redirect to LOGIN_REDIRECT_URL
 LOGIN_REDIRECT_URL = '/search/'
 
 

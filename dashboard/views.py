@@ -7,7 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 # Create your views here.
+
 def index(request):
+    if request.user.is_authenticated:
+        return redirect(reverse('search:index'))
     return render(request, 'dashboard/index.html')
 
 

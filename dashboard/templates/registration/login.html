@@ -3,10 +3,26 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-  </form>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" >    $(document).ready(function(){        $("#id_username").attr('placeholder', 'Usuário');        $("#id_password").attr('placeholder', 'Senha');    }); </script>
+
+  <header>
+    <div class="header-content">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <h2>Login</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <p style="color:black"> {{ form.username }}  </p>
+                    <p style="color:black"> {{ form.password }}  </p>
+                    <button type="submit" class="btn btn-primary btn-xl page-scroll">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </header>
+
+## TO DO: Page to I forgot my password.
 {% endblock %}

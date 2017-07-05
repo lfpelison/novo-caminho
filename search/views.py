@@ -12,4 +12,4 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'url_list'
 
     def get_queryset(self):
-        return news_urls.get_urls( ("jose dirceu"), ('google'), 2)
+        return news_urls.get_urls( ("lula"), ('google'), 2)

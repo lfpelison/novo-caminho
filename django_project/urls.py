@@ -24,5 +24,5 @@ urlpatterns = [
     surl('search/', include('search.urls')),
     surl('admin/', admin.site.urls),
     surl('api/', include('api.urls')),
-
+    url('^', include('django.contrib.auth.urls')),
 ]

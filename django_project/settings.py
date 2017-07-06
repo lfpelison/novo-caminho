@@ -161,7 +161,15 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
 
-
+# Email setting for forget password
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'novocaminhocodenation@gmail.com'
+SERVER_EMAIL = 'novocaminhocodenation@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'novocaminhocodenation@gmail.com'
+EMAIL_HOST_PASSWORD = 'adminadmin123'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 BOOTSTRAP3 = {
     'error_css_class': 'bootstrap3-error',

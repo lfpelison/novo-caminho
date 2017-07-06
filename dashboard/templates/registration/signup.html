@@ -1,10 +1,46 @@
 {% extends 'registration/base.html' %}
 
+{% block title %}Cadastro{% endblock %}
+
 {% block content %}
-  <h2>Sign up</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign up</button>
-  </form>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" >
+        $(document).ready(function(){
+            $("#id_username").attr('placeholder', 'Username');
+            $("#id_password1").attr('placeholder', 'Senha');
+            $("#id_password2").attr('placeholder', 'Repita a senha');
+        });
+</script>
+
+<header>
+  <div class="header-content">
+      <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 text-center">
+              <h2>Cadastre-se no Novo Caminho!</h2>
+              <form method="post">
+                  {% csrf_token %}
+                  <p style="color:black"> {{ form.username }}  </p>
+                  <p style="color:black"> {{ form.first_name }}  </p>
+                  <p style="color:black"> {{ form.last_name }}  </p>
+                  <p style="color:black"> {{ form.email }}  </p>
+                  <p style="color:black"> {{ form.password1 }}  </p>
+                  <p style="color:black"> {{ form.password2 }}  </p>
+                  <button type="submit" class="btn btn-primary btn-xl page-scroll">Cadastrar</button>
+              </form>
+              {% for field in form %}
+
+                  {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                  {% endfor %}
+
+              {% endfor %}
+          </div>
+      </div>
+  </div>
+</header>
+
+
+
+
 {% endblock %}

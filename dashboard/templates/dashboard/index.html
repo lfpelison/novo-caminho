@@ -1,13 +1,28 @@
-{# Muda o template base se o usuário estiver logado ou não #}
-{% extends 'dashboard/base.html' %}
+{% extends 'registration/base.html' %}
 {% load bootstrap3 %}
-
+{% block title %}Index{% endblock %}
 
 {% block content %}
 
-Seja Bem-Vindo a nosso engine de pesquisas de pessoas malvadinhas. Faça o login!
-<br>
+        <header>
+            <div class="header-content">
+                <div class="header-content-inner">
+                    <h1 id="homeHeading">Bem-Vindo ao NOVO CAMINHO</h1>
+                    <hr>
+                    <p>Você poderá descobrir o que a mídia fala negativamente sobre pessoas, empresas ou quaisquer entidades que quiser!</p>
+                    <a href="{% url 'dashboard:login' %}">{% bootstrap_button "Já sou usuário" button_type="submit" button_class="btn btn-primary btn-xl page-scroll" %}</a>
+                    <a href="{% url 'dashboard:signup' %}">{% bootstrap_button "Quero cadastrar" button_type="submit" button_class="btn btn-primary btn-xl page-scroll" %}</a>
 
-<a href="{% url 'dashboard:login' %}">{% bootstrap_button "Login" button_type="submit" button_class="btn-primary" %}</a>
+                </div>
+            </div>
+        </header>
 
-{% endblock content %}
+      {% if error_message %}
+      <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          {{ error_message }}
+        </div>
+      {% endif %}
+
+{% endblock %}

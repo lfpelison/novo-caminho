@@ -15,7 +15,10 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+#returns > /novo-caminho
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+#returns > /novo-caminho/django_project
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -126,7 +129,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+## If user not connected, redirect to LOGIN_URL
 LOGIN_URL = '/login/'
+## When user connected, redirect to LOGIN_REDIRECT_URL
+LOGIN_REDIRECT_URL = '/search/'
+
 
 
 # Internationalization
@@ -146,9 +153,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+#return > /django_project/staticfiles
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
 )
+
+
+
+BOOTSTRAP3 = {
+    'error_css_class': 'bootstrap3-error',
+    'required_css_class': 'bootstrap3-required',
+    'javascript_in_head': True,
+    'include_jquery': True,
+}

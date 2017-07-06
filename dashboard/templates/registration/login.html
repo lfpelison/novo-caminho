@@ -19,13 +19,13 @@
                     <p style="color:black"> {{ form.password }}  </p>
                     <button type="submit" class="btn btn-primary btn-xl page-scroll">Login</button>
                 </form>
-                {% for field in form %}
 
-                    {% for error in field.errors %}
-                      <p style="color: red">{{ error }}</p>
-                    {% endfor %}
+                {% if form.errors %}
+                    <br>
+                    <br>
+                    <p style="color:papayawhip">Invalid username or password! Please try again.</p>
+                {% endif %}
 
-                {% endfor %}
             </div>
         </div>
     </div>

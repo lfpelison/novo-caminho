@@ -1,0 +1,21 @@
+{% extends 'registration/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block title %} Services {% endblock %}
+
+{% block content %}
+
+    <section class="bg-primary" id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">Pesquise as mídias negativas!</h2>
+                    <hr class="light">
+                    <p class="text-faded">Com o serviço do Novo Caminho você pode saber exatamente o que a mídia anda falando a respeito de alguma pessoa, empresa ou qualquer entidade. Basta um clique para você descobrir quais notícias negativas foram lançadas pela mídia e qual o risco de certa pessoa ou empresa ser perigosa. Comece a pesquisar as notícias agora!</p>
+                    <a href="{% url 'dashboard:index' %}" class="page-scroll btn btn-default btn-xl sr-button">Venha para o NOVO CAMINHO!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

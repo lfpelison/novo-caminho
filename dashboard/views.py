@@ -15,6 +15,15 @@ def index(request):
         return redirect(reverse('search:index'))
     return render(request, 'dashboard/index.html')
 
+def about(request):
+    return render(request, 'dashboard/about.html')
+
+def services(request):
+    return render(request, 'dashboard/services.html')
+
+def contact(request):
+    return render(request, 'dashboard/contact.html')
+
 
 def signup(request):
     if request.method == 'POST':

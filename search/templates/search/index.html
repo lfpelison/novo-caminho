@@ -1,5 +1,37 @@
-<ul>
-{% for url in url_list %}
-    <li><a href="{{url}}">{{url}}</a></li>
+{% extends "search/base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-6">
+    <form method="get">
+      {{form.as_p}}
+      <input type="submit">
+    </form>
+  </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
+
+<ol>
+{% for article in articles %}
+  <li>{{article|linebreaks}}</li>
 {% endfor %}
-</ul>
+</ol>
+
+{% load search_extras %}
+{% if is_paginated %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+            {{page_obj.paginator.previous_page_number}}
+                <a href="?{% url_replace page=page_obj.paginator.previous_page_number %}">previous</a>
+            {% endif %}
+            <span class="page-current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?{% url_replace page=page_obj.paginator.next_page_number %}">next</a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
+{% endblock %}

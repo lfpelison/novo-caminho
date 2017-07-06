@@ -19,40 +19,29 @@ class SignUpForm(UserCreationForm):
 #    attrs={'size': 5, 'class': 'form-control', 'placeholder': 'First Name'})
 
 from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMultiAlternatives
+from django.template import loader
 
 class CustomPasswordResetForm(PasswordResetForm):
     """
         Overriding the Email Password Resert Forms Save to be able to send HTML email
     """
-    def save(self, domain_override=None, email_template_name='registration/password_reset_email.html',
-             use_https=False, token_generator=default_token_generator, request=None, email_subject_name='registration/password_reset_subject.txt', **kwargs):
-        from django.core.mail import EmailMultiAlternatives
-        from django.utils.html import strip_tags
-        from django.template.loader import render_to_string
-        from django.contrib.sites.models import get_current_site
-        from django.utils.http import int_to_base36
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        """
+            Sends a django.core.mail.EmailMultiAlternatives to 'to_email'.
+        """
+        subject = loader.render_to_string(subject_template_name, context)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        body = loader.render_to_string(email_template_name, context)
 
-        for user in self.users_cache:
-            if not domain_override:
-                current_site = get_current_site(request)
-                site_name = current_site.name
-                domain = current_site.domain
-            else:
-                 site_name = domain = domain_override
+        email_message = EmailMultiAlternatives(subject, body, from_email, [to_email])
+        # New line introduce
+        email_message.attach_alternative(body, 'text/html')
 
-            c = {
-                'email': user.email,
-                'domain': domain,
-                'site_name': site_name,
-                'uid': int_to_base36(user.id),
-                'user': user,
-                'token': token_generator.make_token(user),
-                'protocol': use_https and 'https' or 'http',
-            }
-            render = render_to_string(email_template_name, c)
-            render_subject = render_to_string(email_subject_name, c)
+        if html_email_template_name is not None:
+            html_email = loader.render_to_string(html_email_template_name, context)
+            email_message.attach_alternative(html_email, 'text/html')
 
-            msg = EmailMultiAlternatives(render_subject, strip_tags(render), None, [user.email])
-            msg.attach_alternative(render, "text/html")
-            msg.send()
+        email_message.send()

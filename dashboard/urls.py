@@ -11,4 +11,7 @@ urlpatterns = [
     surl('login/', auth_views.login, name='login'),
     surl('logout/', auth_views.logout, {'next_page': '/'}, name='logout'),
     surl('signup/', views.signup, name='signup'),
+    surl('about/', views.about, name='about'),
+    surl('services/', views.services, name='services'),
+    surl('contact/', views.contact, name='contact'),
 ]

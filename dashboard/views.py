@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from forms import SignUpForm
+
 # Create your views here.
 
 def index(request):
@@ -28,3 +29,13 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+from django.contrib.auth.views import password_reset as django_password_reset
+from dashboard.forms import CustomPasswordResetForm
+
+def password_reset(*args, **kwargs):
+    """
+        Overriding the Email Password Resert Forms Save to be able to send HTML email
+    """
+    kwargs['password_reset_form'] = CustomPasswordResetForm
+    return django_password_reset(*args, **kwargs)

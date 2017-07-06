@@ -13,7 +13,10 @@
 
 <ol>
 {% for article in articles %}
-  <li>{{article|linebreaks}}</li>
+  <li><a href="{{article.url}}">{{article.title}}</a></li>
+  <br>
+  {{article.short_summary}}...
+  <hr>
 {% endfor %}
 </ol>
 

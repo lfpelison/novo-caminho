@@ -17,6 +17,10 @@
                     {% csrf_token %}
                     <p style="color:black"> {{ form.username }}  </p>
                     <p style="color:black"> {{ form.password }}  </p>
+                    <p>
+                      <a href={% url 'dashboard:password_reset' %} style=color:#86838a>Esqueci minha Senha</a>
+                    </p>
+
                     <button type="submit" class="btn btn-primary btn-xl page-scroll">Login</button>
                 </form>
 
@@ -31,5 +35,4 @@
     </div>
   </header>
 
-## TO DO: Page to I forgot my password.
 {% endblock %}

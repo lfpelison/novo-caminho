@@ -44,7 +44,7 @@ def index(request):
             for art in articles_from_search:
                 saved_article = Article().fill_and_create(art, entities)
                 if saved_article is not None:
-                    print "SAVED AN ARTICLE: {0}".format(saved_article)
+                    #print "SAVED AN ARTICLE: {0}".format(saved_article)
                     articles_to_display.append(saved_article)
 
             # predict(articles)

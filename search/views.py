@@ -12,6 +12,30 @@ from forms import SearchForm
 from models import Article
 import time, sys
 
+def save_articles(articles, entities):
+    saved_articles = []
+    for art in articles:
+        saved_article = Article().fill_and_create(art, entities)
+        if saved_article is not None:
+            print "SAVED AN ARTICLE: {0}".format(saved_article).encode('utf-8')
+            sys.stdout.flush()
+            saved_articles.append(saved_article)
+    return saved_articles
+
+def check_articles_db(urls, entities):
+    urls_not_in_db = []
+    articles_to_display = []
+    for url in urls:
+        article_in_db = Article.objects.filter(url=url).first()
+        if article_in_db is None:
+            urls_not_in_db.append(url)
+        else:
+            article_in_db.entities = list(set(article_in_db.entities).union(set(entities))) # update the Article's entities
+            article_in_db.save()
+            articles_to_display.append(article_in_db)
+    return [articles_to_display, urls_not_in_db]
+
+
 @login_required
 def index(request):
     form = SearchForm()
@@ -20,34 +44,21 @@ def index(request):
         start = time.time()
 
         form = SearchForm(request.GET)
-        print form.is_valid()
         if form.is_valid():
-            print form.cleaned_data
             entities = [e.strip(' ') for e in form.cleaned_data['query'].split(',')] # Split and clean query
             search_engines = form.cleaned_data['engines']
             # page = self.request.GET.get('page', 1)
             urls = get_urls(entities, search_engines, range(1)) ## TODO: remove forbidden URLs from list
                                                                 ## TODO: when scrapper is fixed, change how many pages to get in get_urls
-                                                                ## TODO: new entity same url---DONE
             urls_not_in_db = []
             articles_to_display = []
-            for url in urls:
-                article_in_db = Article.objects.filter(url=url).first()
-                if article_in_db is None:
-                    urls_not_in_db.append(url)
-                else:
-                    article_in_db.entities = list(set(article_in_db.entities).union(set(entities))) # gets the union between the entities
-                    article_in_db.save()
-                    articles_to_display.append(article_in_db)
 
-            articles_from_search = get_articles(urls_not_in_db)
-            for art in articles_from_search:
-                saved_article = Article().fill_and_create(art, entities)
-                if saved_article is not None:
-                    print "SAVED AN ARTICLE: {0}".format(saved_article).encode('utf-8')
-                    sys.stdout.flush()
-                    articles_to_display.append(saved_article)
+            [articles_to_display, urls_not_in_db] = check_articles_db(urls, entities)   # checks the URLs from the search, and returns the Articles
+                                                                                        # already stored, as well as the URLs that are not stored
 
+            articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
+            saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
+            articles_to_display.append(saved_articles)                      # show the just saved Articles
             # predict(articles)
             # filter(positives)
             print articles_to_display

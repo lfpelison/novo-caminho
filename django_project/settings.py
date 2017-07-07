@@ -97,6 +97,14 @@ DATABASES = {
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
+MONGO_DATABASE = {
+    'db':           'novo-caminho',
+    'username':     'caminho_user',
+    'password':     'admin123',
+    'host':         'mongodb://caminho_user:admin123@ds053196.mlab.com:53196/novo-caminho'
+}
+
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',

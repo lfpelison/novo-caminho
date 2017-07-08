@@ -37,7 +37,6 @@
 </head>
 
 <body>
-
     <div id="wrapper" class="active">
         <!-- Sidebar -->
                 <!-- Sidebar -->
@@ -59,7 +58,7 @@
             <!-- Keep all page content within the page-content inset div! -->
             <div class="page-content inset">
                 <div class="row">
-                <form method="get" style="background-color:#d5ebed" class="well">
+                <form method="get" style="background-color:#eafcfc" class="well">
                     {{form.query}}
                     <input type="submit" value="Pesquisar" class="btn btn-primary btn-xl page-scroll">
 
@@ -77,22 +76,29 @@
 
                     <!-- Start the second ROW -->
                  <div class="row">
-                      <div class="col-xs-6"><!-- div da esquerda -->
+                      <div class="col-xs-7"><!-- div da esquerda -->
                           <br>
                           <ol>
                           {% for article in articles %}
-                            <li>{{article}}</li>
+                            <li><a style:"font-size:1" href="{{article.url}}">{{article.title}}</a></li>
+                            {{article.short_summary}}...
+                            <p style="color:green">{{article.url|urlizetrunc:30}} | Publicada em: {{article.publish_date}} </p>
+                            <hr>
                           {% endfor %}
                           </ol>
                       </div>
 
-                      <div class="col-xs-6"> <!-- div da direita -->
+                      <div class="col-xs-5" style="border-left:3px solid #e2e2e2;height:1430px"> <!-- div da direita -->
                           <br>
                           <br>
+
+                          <div id="engines">
                           {{form.engines}}
+                          </div>
                       </div>
                  </div>
-
+                 <div class="row">
+                 </div>
 
                 </form>
             </div>

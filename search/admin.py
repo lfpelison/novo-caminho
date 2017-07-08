@@ -3,9 +3,9 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from .models import Query, Entity
+from .models import Query
 
 admin.site.register(Query)
-admin.site.register(Entity)
+#admin.site.register(Entity)
 
 # Register your models here.

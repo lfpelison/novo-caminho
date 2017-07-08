@@ -10,4 +10,5 @@ app_name = 'search'
 
 urlpatterns = [
     surl('/', views.index, name='index'),
+    surl('history/', views.history, name='index'),
 ]

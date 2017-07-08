@@ -44,20 +44,14 @@ class Article(mg.Document):
         else:
             return None
 
-@python_2_unicode_compatible  # only if you need to support Python 2
-class Entity(models.Model):
-    name = models.CharField(max_length=100, blank=False)
-
-    def __str__(self):
-        return "Entity Name: {0}, Entity ID: {1}, Query: {2}".format(self.name, str(self.id), str(self.query_set))
-
 
 @python_2_unicode_compatible  # only if you need to support Python 2
 class Query(models.Model):
     name = models.CharField(max_length=200, blank=False)
     time = models.DateTimeField('date searched', default=utils.timezone.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    entity = models.ManyToManyField(Entity)
-
+     # JSON-serialized (text) version of the list
+    entities = models.TextField(null=True)
+    engines = models.TextField(null=True)
     def __str__(self):
-        return "User ID: {0}, Name: {1}, Searched: {2}, Query ID: {3}".format(str(self.user), self.name, str(self.time), str(self.id))
+        return "User: {0}, Name: {1}, Time: {2}, Entities: {3}, Engines: {4}".format(str(self.user), self.name, str(self.time), str(self.entities), str(self.engines))

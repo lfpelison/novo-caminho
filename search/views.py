@@ -9,8 +9,9 @@ from django.views import generic, View
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from forms import SearchForm
-from models import Article
-import time, sys
+from models import Article, Query
+import time, sys, json
+
 
 def save_articles(articles, entities):
     saved_articles = []
@@ -49,18 +50,20 @@ def index(request):
             search_engines = form.cleaned_data['engines']
             # page = self.request.GET.get('page', 1)
             urls = get_urls(entities, search_engines, range(1)) ## TODO: remove forbidden URLs from list
-                                                                ## TODO: when scrapper is fixed, change how many pages to get in get_urls
+                                                                ## TODO: pagination
+                                                                ## TODO: categories and risk
             urls_not_in_db = []
             articles_to_display = []
 
             [articles_to_display, urls_not_in_db] = check_articles_db(urls, entities)   # checks the URLs from the search, and returns the Articles
-                                                                                        # already stored, as well as the URLs that are not stored
+                                                                                        # already stored, as well as the URLs th(at are not stored
 
             articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
             articles_to_display.append(saved_articles)                      # show the just saved Articles
-            # predict(articles)
-            # filter(positives)
+
+            query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
+            print query
             print articles_to_display
             context['articles'] = articles_to_display
             loadingpagetime = time.time() - start

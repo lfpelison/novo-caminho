@@ -69,3 +69,8 @@ def index(request):
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
     return render(request, 'search/index.html', context)
+
+@login_required
+def history(request):
+    context = {'queries':request.user.query_set.all()}
+    return render(request, 'search/history.html', context)

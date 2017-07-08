@@ -48,6 +48,7 @@ def index(request):
         if form.is_valid():
             entities = [e.strip(' ') for e in form.cleaned_data['query'].split(',')] # Split and clean query
             search_engines = form.cleaned_data['engines']
+
             # page = self.request.GET.get('page', 1)
             urls = get_urls(entities, search_engines, range(1)) ## TODO: remove forbidden URLs from list
                                                                 ## TODO: pagination
@@ -68,7 +69,7 @@ def index(request):
             context['articles'] = articles_to_display
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
-    return render(request, 'search/index.html', context)
+    return render(request, 'search/index2.html', context)
 
 @login_required
 def history(request):

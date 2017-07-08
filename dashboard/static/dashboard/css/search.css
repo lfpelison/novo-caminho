@@ -13,6 +13,15 @@ body{
     height: 100%
 }
 
+#titulo{
+    padding-top: 30px;
+    font-size: 200%;
+    padding-left: 20px;
+    transition: all .4s ease 0s;
+    height: 100%
+
+}
+
 #logoutANDname{
     float: right;
     margin-top: 10px;

@@ -1,9 +1,21 @@
-{% extends "search/base.html" %}
+{% extends "search/base2.html" %}
 
 {% block content %}
-<ul>
+<div id="titulo">
+<center><p> Histórico de Pesquisas </p></center>
+</div>
+<hr>
+<ol>
   {% for query in queries %}
-    <li>{{query}}</li>
+  <center>
+    <li style="color:green">Você pesquisou: {{query.entities}}
+    <br>
+    Na data: {{query.time}} | No(s) site(s): {{query.engines}}
+    </li>
+    <br>
+    <a href= {% url 'search:index' %} class="page-scroll btn btn-default btn-xl sr-button">Refaça a busca!</a>
+  </center>
+<hr style="height:1px;border:none;background-color:#bfbfbf;width:90%">
   {% endfor %}
-</ul>
+</ol>
 {% endblock %}

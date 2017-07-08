@@ -6,6 +6,7 @@ from django import utils
 from django.utils.encoding import python_2_unicode_compatible
 from django.core.validators import MinLengthValidator
 from django.core.exceptions import ValidationError
+import json
 
 ### MONGO
 import mongoengine as mg
@@ -55,3 +56,9 @@ class Query(models.Model):
     engines = models.TextField(null=True)
     def __str__(self):
         return "User: {0}, Name: {1}, Time: {2}, Entities: {3}, Engines: {4}".format(str(self.user), self.name, str(self.time), str(self.entities), str(self.engines))
+
+    def get(self, field):
+        return json.JSONDecoder().decode(getattr(self, field))
+
+    def set(self, field, list):
+        setattr(self, field, json.dumps(list))

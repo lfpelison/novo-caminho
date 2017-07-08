@@ -18,6 +18,7 @@
       <div class="row">
           <div class="col-lg-8 col-lg-offset-2 text-center">
               <h2>Cadastre-se no Novo Caminho!</h2>
+              <br>
               <form method="post">
                   {% csrf_token %}
                   <p style="color:black"> {{ form.username }}  </p>
@@ -26,6 +27,7 @@
                   <p style="color:black"> {{ form.email }}  </p>
                   <p style="color:black"> {{ form.password1 }}  </p>
                   <p style="color:black"> {{ form.password2 }}  </p>
+                  <br>
                   <button type="submit" class="btn btn-primary btn-xl page-scroll">Cadastrar</button>
               </form>
               {% for field in form %}

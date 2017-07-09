@@ -33,7 +33,8 @@
        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
    <![endif]-->
-
+   <title>Novo Caminho</title>
+<link rel="shortcut icon" type="image/png" href="{% static "images/favicon.png" %}">
 </head>
 
 <body>
@@ -42,6 +43,9 @@
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
+                <a href="{% url 'dashboard:index' %}" class="navbar-brand">
+                    <img src="{% static "images/favicon.png" %}" alt="NovoCaminho">
+                </a>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
@@ -61,6 +65,10 @@
                     </li>
                     <li>
                         <a class="page-scroll" href="{% url 'dashboard:contact' %}">Contato</a>
+                        <!-- % url 'dashboard:contact' % -->
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="{% url 'api:index_API' %}">API</a>
                         <!-- % url 'dashboard:contact' % -->
                     </li>
                 </ul>

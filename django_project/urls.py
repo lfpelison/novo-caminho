@@ -20,6 +20,8 @@ from django.contrib.auth import views as auth_views
 import api
 
 urlpatterns = [
+    url(r'^auth/', include('rest_framework.urls',
+        namespace='rest_framework')),
     surl('', include('dashboard.urls')),
     surl('search/', include('search.urls')),
     surl('admin/', admin.site.urls),

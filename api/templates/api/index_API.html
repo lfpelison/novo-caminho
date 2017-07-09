@@ -1,0 +1,32 @@
+{% extends 'registration/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block title %} API {% endblock %}
+
+{% block content %}
+
+    <section class="bg-primary" id="services" style="background-color:green">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">Bem-vindo à nossa API.</h2>
+                    <br>
+                    <h3 class="section-heading"> Nela, estarão disponibilizadas todas as notícias que temos no banco de dados. </h3>
+                    <br>
+                    <hr class="light">
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <br>
+    <br>
+    <hr style="height:4px;border:none;background-color:green;width:100%">
+    <br>
+    <br>
+    <center>
+    <h3 class="text-faded" style="color:black">Para utilizá-la, basta digitar a URL: /api/articles/ seguido da sua busca, por exemplo: /api/articles/lula,dilma</h3>
+    </center>
+    <br>
+    <br>
+{% endblock %}

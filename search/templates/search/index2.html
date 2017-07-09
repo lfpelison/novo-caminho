@@ -6,19 +6,20 @@
 
 
                 <div class="row">
-                <form method="get" style="background-color:#eafcfc" class="well">
+                    <span class="dropdown" id="logoutANDname">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.get_username }} <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><center><a href="{% url 'dashboard:password_reset' %}">Trocar senha</a></center></li>
+                        <li role="separator" class="divider"></li>
+                        <li><center><a href="{% url 'dashboard:logout' %}">{% bootstrap_button content='Logout'%}</a></center></li>
+                        <!--TODO: A PAGE TO CHANGE THE PASSWORD! -->
+                      </ul>
+                    </span>
+                <form method="get" style="background-color:#e0e0e0" class="well">
                     {{form.query}}
                     <input type="submit" value="Pesquisar" class="btn btn-primary btn-xl page-scroll">
 
-                      <span class="dropdown" id="logoutANDname">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.get_username }} <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                          <li><center><a href="{% url 'dashboard:password_reset' %}">Trocar senha</a></center></li>
-                          <li role="separator" class="divider"></li>
-                          <li><center><a href="{% url 'dashboard:logout' %}">{% bootstrap_button content='Logout'%}</a></center></li>
-                          <!--TODO: A PAGE TO CHANGE THE PASSWORD! -->
-                        </ul>
-                      </span>
+
                  </div>
                     <!-- End first ROW -->
 
@@ -49,7 +50,7 @@
                  </div>
 
                 </form>
-            </div>
+
 
 
       {% if error_message %}

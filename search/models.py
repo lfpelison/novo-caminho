@@ -62,3 +62,10 @@ class Query(models.Model):
 
     def set(self, field, list):
         setattr(self, field, json.dumps(list))
+
+@python_2_unicode_compatible
+class Keyword(models.Model):
+    name = models.CharField(max_length=100, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    def __str__(self):
+        return "Name: {0}, User{1}".format(self.name,self.user)

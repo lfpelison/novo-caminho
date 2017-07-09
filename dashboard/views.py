@@ -20,10 +20,6 @@ from django.http import HttpResponseRedirect
 def index(request):
     reset_password = False
     domain = request.META['HTTP_HOST']
-    print (domain)
-    print (str(HttpResponseRedirect(request.META.get('HTTP_REFERER'))).split("http://", 1)[1])
-    print (domain+"/password_reset/")
-    print ((domain+"/password_reset/") in str(HttpResponseRedirect(request.META.get('HTTP_REFERER'))).split("http://", 1)[1])
     if ((domain+"/password_reset/") in str(HttpResponseRedirect(request.META.get('HTTP_REFERER'))).split("http://", 1)[1]):
         reset_password = True
     if request.user.is_authenticated:

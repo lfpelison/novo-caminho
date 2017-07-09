@@ -39,12 +39,14 @@ def check_articles_db(urls, entities):
 
 @login_required
 def index(request):
+
     form = SearchForm()
     context = {'form': form}
+
     if request.method == 'GET':
         start = time.time()
-
         form = SearchForm(request.GET)
+
         if form.is_valid():
             entities = [e.strip(' ') for e in form.cleaned_data['query'].split(',')] # Split and clean query
             search_engines = form.cleaned_data['engines']

@@ -31,7 +31,7 @@ class Article(mg.Document):
     def __str__(self):
         return "Titulo: {0}  ///  {1}".format(self.title,self.short_summary)
 
-    def fill_and_create(self, article, entities):
+    def fill_and_create(self, article, entities, risk, category):
         if article.title != "" and article.summary != "" and article.url != "":
             self.url=article.url
             self.short_summary=article.summary[:200]
@@ -39,6 +39,8 @@ class Article(mg.Document):
             self.title=article.title
             self.entities= entities
             self.publish_date= article.publish_date
+            self.risk = risk
+            self.category = category
             self.save()
             return self
         else:

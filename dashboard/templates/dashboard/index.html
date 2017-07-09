@@ -12,6 +12,11 @@
                     <p>Você poderá descobrir o que a mídia fala negativamente sobre pessoas, empresas ou quaisquer entidades que quiser!</p>
                     <a href="{% url 'dashboard:login' %}">{% bootstrap_button "Já sou usuário" button_type="submit" button_class="btn btn-primary btn-xl page-scroll" %}</a>
                     <a href="{% url 'dashboard:signup' %}">{% bootstrap_button "Quero cadastrar" button_type="submit" button_class="btn btn-primary btn-xl page-scroll" %}</a>
+                    {% if reset_password == 1 %}
+                    <br><br>
+                    <span>Uma mensagem para redefinir sua senha foi enviada ao seu e-mail.</span>
+                    {% endif %}
+
                 </div>
             </div>
         </header>
@@ -23,5 +28,6 @@
           {{ error_message }}
         </div>
       {% endif %}
+
 
 {% endblock %}

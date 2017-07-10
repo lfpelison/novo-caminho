@@ -8,9 +8,9 @@
 <ol>
   {% for query in queries %}
   <center>
-    <li style="color:green">Você pesquisou: {{query.entities}}
+    <li style="color:green"> Você pesquisou: {{query.get_entities_formated}}
     <br>
-    Na data: {{query.time}} | No(s) site(s): {{query.engines}}
+    Na data: {{query.time}} | No(s) site(s): {{query.get_engines}}
     </li>
     <br>
     <a href= {% url 'search:index' %} class="page-scroll btn btn-default btn-xl sr-button">Refaça a busca!</a>

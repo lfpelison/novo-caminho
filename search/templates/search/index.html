@@ -38,6 +38,7 @@
         </div>
 
         <div class="col-xs-5" style="border-left:3px solid #e2e2e2;height:1430px"> <!-- div da direita -->
+          <div class"row">
             <br>
             <br>
 
@@ -47,13 +48,33 @@
             <div id="keywords">
               {{form.keywords}}
             </div>
-            </form>
+	    </form>
             <form method="get" action= {% url 'search:download' %}>
                  {% for url in urls %}
                     <input type="hidden" name="article_url" value="{{url}}">
                  {% endfor %}
                  <button type="submit" class="page-scroll btn btn-default btn-xl sr-button"> Gerar Relatório</button>
             </form>
+
+          </div>
+            <div class="row" id="risk_bar">
+            <h2>Risco:</h2>
+              {% for entity, risk in risks.iteritems %}
+              <div class="container">
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="progress">
+                              <div class="progress-bar" style="width:{{risk}}%; background:#49719b;">
+                                  <span class="progress-title">{{entity}}</span>
+                                  <div class="progress-value">{{risk}}%</div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+              </div>
+            </div>
         </div>
    </div>
 

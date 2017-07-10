@@ -27,6 +27,7 @@ from reportlab.lib.units import inch
 from urlparse import urlparse
 
 
+
 def save_articles(articles, entities):
     saved_articles = []
     for art in articles:
@@ -55,6 +56,15 @@ def check_articles_db(urls, entities):
 def get_domain(url):
     return urlparse(url).netloc
 
+def calculate_risk(entities):
+    risk = {}
+    for entity in entities:
+        articles = [art for art in Article.objects.all() if entity in art.entities]
+        l=[art.risk for art in articles if art.risk != None]
+        risk[entity] = float(sum(l))/len(l)
+    return risk
+
+
 @login_required
 def index(request):
     form = SearchForm(user=request.user)
@@ -82,6 +92,10 @@ def index(request):
 
             articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
+            context['risks'] = calculate_risk(entities)
+            for entity in entities:
+                context['risks'][entity] = int(100*(context['risks'][entity]-1)/2) #Format to percent
+
             if saved_articles:
                 articles_to_display += saved_articles                       # show the just saved Articles
 
@@ -95,16 +109,15 @@ def index(request):
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
         else:
             print "-----FORMULARIO INVALIDO------"
+        
     return render(request, 'search/index.html', context)
+
 
 
 @login_required
 def history(request):
     context = {'queries':request.user.query_set.all()}
     return render(request, 'search/history.html', context)
-
-def get_domain(url):
-    return urlparse(url).netloc
 
 
 @login_required
@@ -169,6 +182,8 @@ def download(request):
             response = HttpResponse(pdf, content_type='application/pdf')
             response['Content-Disposition'] = ('attachment; filename="relatorioNOTICIAS%s.pdf"' %time)
             return response
+
+    return response
 
 
 @login_required

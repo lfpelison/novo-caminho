@@ -99,7 +99,7 @@ def index(request):
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
         else:
             print "-----FORMULARIO INVALIDO------"
-        print (context)
+        
     return render(request, 'search/index.html', context)
 
 

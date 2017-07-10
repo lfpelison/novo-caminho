@@ -82,7 +82,6 @@ def index(request):
             # page = self.request.GET.get('page', 1)
             urls = get_urls(search_keys, search_engines, range(1))
             ## TODO: pagination
-            ## TODO: print risk bar
 
             ignored_domains = [ign.name for ign in request.user.ignoreddomain_set.all()]                 # Gets all IgnoredDomains from User
             urls = [url for url in urls if get_domain(url) not in ignored_domains] # Gets the non-ignored URLs
@@ -103,13 +102,13 @@ def index(request):
                 query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
                 print query
                 print articles_to_display
-            context['articles'] = articles_to_display
+            context['articles'] = [art for art in articles_to_display if art.category != "Positiva"] 
             context['urls'] = urls
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
         else:
             print "-----FORMULARIO INVALIDO------"
-        
+
     return render(request, 'search/index.html', context)
 
 

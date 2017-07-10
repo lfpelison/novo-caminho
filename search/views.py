@@ -86,9 +86,9 @@ def index(request):
 
             articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
-            context['risk'] = calculate_risk(entities)
+            context['risks'] = calculate_risk(entities)
             for entity in entities:
-                context['risk'][entity] = int(100*(context['risk'][entity]-1)/2) #Format to percent
+                context['risks'][entity] = int(100*(context['risks'][entity]-1)/2) #Format to percent
 
             articles_to_display.append(saved_articles)                      # show the just saved Articles
 
@@ -99,6 +99,7 @@ def index(request):
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
         else:
             print "-----FORMULARIO INVALIDO------"
+        print (context)
     return render(request, 'search/index.html', context)
 
 

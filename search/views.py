@@ -72,17 +72,17 @@ def index(request):
 
     if request.method == 'GET':
         start = time.time()
-
+        page = int(request.GET.get('page',1)) # Gets the page number or 1 if it does not exist in the GET dict
+        context['page'] = page
         form = SearchForm(request.GET,user=request.user)
         if form.is_valid():
             entities = [e.strip(' ').lower() for e in form.cleaned_data['query'].split(',')] # Split and clean query
             search_engines = form.cleaned_data['engines']
             keywords = form.cleaned_data['keywords']
             search_keys = entities + keywords
-            # page = self.request.GET.get('page', 1)
-            urls = get_urls(search_keys, search_engines, range(1))
-            ## TODO: pagination
-            ## TODO: print risk bar
+
+            print page
+            urls = get_urls(search_keys, search_engines, range(page-1,page))
 
             ignored_domains = [ign.name for ign in request.user.ignoreddomain_set.all()]                 # Gets all IgnoredDomains from User
             urls = [url for url in urls if get_domain(url) not in ignored_domains] # Gets the non-ignored URLs
@@ -94,22 +94,28 @@ def index(request):
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
             context['risks'] = calculate_risk(entities)
             for entity in entities:
-                context['risks'][entity] = int(100*(context['risks'][entity]-1)/2) #Format to percent
+                context['risks'][entity] = int(100*(context['risks'][entity]-1)/2) # Format to percent
 
             if saved_articles:
                 articles_to_display += saved_articles                       # show the just saved Articles
 
             if 'dont_save_query' not in request.GET:
                 query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
-                print query
-                print articles_to_display
+            articles_to_display = [art for art in articles_to_display if art.category != "Positiva"]
             context['articles'] = articles_to_display
             context['urls'] = urls
+            categories_dict = {}
+            for art in articles_to_display:
+                if art.category not in categories_dict.keys():
+                    categories_dict[art.category] = 1
+                else:
+                    categories_dict[art.category] += 1
+            context['categories'] = categories_dict
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
         else:
             print "-----FORMULARIO INVALIDO------"
-        
+
     return render(request, 'search/index.html', context)
 
 

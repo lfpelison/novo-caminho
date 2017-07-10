@@ -31,6 +31,8 @@ lxml==3.3.5
 mongoengine==0.13.0
 newspaper==0.1.0.7
 nltk==2.0.5
+numpy==1.13.1
+pandas==0.20.3
 parsel==1.2.0
 pathlib2==2.3.0
 pexpect==4.2.1
@@ -50,12 +52,16 @@ python-dateutil==2.4.0
 pytz==2017.2
 PyYAML==3.11
 queuelib==1.4.2
+reportlab==3.4.0
 requests==2.6.0
 scandir==1.5
+scikit-learn==0.18.2
+scipy==0.19.1
 Scrapy==1.4.0
 service-identity==17.0.0
 simplegeneric==0.8.1
 six==1.10.0
+sklearn==0.0
 smarturls==0.1.7
 static3==0.7.0
 tldextract==1.5.1
@@ -65,4 +71,3 @@ urllib3==1.21.1
 w3lib==1.17.0
 wcwidth==0.1.7
 zope.interface==4.4.2
-reportlab==3.4.0

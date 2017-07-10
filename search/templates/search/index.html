@@ -47,11 +47,16 @@
             <div id="keywords">
               {{form.keywords}}
             </div>
-
-            <a href="{% url 'search:download' %}" class="page-scroll btn btn-default btn-xl sr-button">Gerar Relatório</a>
+            </form>
+            <form method="get" action= {% url 'search:download' %}>
+                 {% for url in urls %}
+                    <input type="hidden" name="article_url" value="{{url}}">
+                 {% endfor %}
+                 <button type="submit" class="page-scroll btn btn-default btn-xl sr-button"> Gerar Relatório</button>
+            </form>
         </div>
    </div>
-  </form>
+
 
 
   {% if error_message %}

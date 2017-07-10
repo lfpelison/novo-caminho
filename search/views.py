@@ -13,12 +13,15 @@ from models import Article, Query, Keyword
 import time, sys, json
 from reportlab.pdfgen import canvas
 from io import BytesIO
+from time import gmtime, strftime
+
 
 from django.core.files.storage import FileSystemStorage
 
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
+from urlparse import urlparse
 
 
 def save_articles(articles, entities):
@@ -76,6 +79,7 @@ def index(request):
             print search_keys
             print articles_to_display
             context['articles'] = articles_to_display
+            context['urls'] = urls
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
         else:
@@ -89,23 +93,62 @@ def history(request):
     context = {'queries':request.user.query_set.all()}
     return render(request, 'search/history.html', context)
 
+def get_domain(url):
+    return urlparse(url).netloc
+
+
 @login_required
 def download(request):
-    doc = SimpleDocTemplate("/tmp/somefilename.pdf")
-    styles = getSampleStyleSheet()
-    Story = [Spacer(1,2*inch)]
-    style = styles["Normal"]
-    for i in range(100):
-       bogustext = ("This is Paragraph number %s.  " % i) * 20
-       p = Paragraph(bogustext, style)
-       Story.append(p)
-       Story.append(Spacer(1,0.2*inch))
-    doc.build(Story)
+    #form = ReportForm()
+    #context = {'form': form}
+    if request.method == 'GET':
+        urls = request.GET.getlist("article_url")
+        #form = ReportForm(request.GET.getlist("article_url[]"))
+        time = strftime("%Y-%m-%d-%H_%M_%S", gmtime())
+        doc = SimpleDocTemplate("/tmp/relatorioNOTICIAS%s.pdf" %time)
+        styles = getSampleStyleSheet()
+        Story = [Spacer(1,0*inch)]
+        style = styles["Normal"]
+        bogustext = ("Relatório de notícias:")
+        p = Paragraph(bogustext, style)
+        Story.append(p)
+        Story.append(Spacer(1,0.2*inch))
+        for i, url in enumerate(urls):
+            article_in_db = Article.objects.filter(url=url).first()
+            bogustext = ("%d. Título da notícia: %s." % (i+1, article_in_db.title))
+            p = Paragraph(bogustext, style)
+            Story.append(p)
+            bogustext = ("Resumo da notícia: %s." % article_in_db.long_summary)
+            p = Paragraph(bogustext, style)
+            Story.append(p)
+            if article_in_db.publish_date != None:
+                bogustext = ("Data de publicação: %s." % article_in_db.publish_date)
+                p = Paragraph(bogustext, style)
+                Story.append(p)
+            bogustext = ("Risco dessa notícia: %s." % article_in_db.risk)
+            p = Paragraph(bogustext, style)
+            Story.append(p)
+            bogustext = "Entidades envolvidas na notícia: "
+            for entity in article_in_db.entities:
+                bogustext += ("%s " %entity)
+            p = Paragraph(bogustext, style)
+            Story.append(p)
+            bogustext = ("Categoria da notícia: %s." % article_in_db.category)
+            p = Paragraph(bogustext, style)
+            Story.append(p)
+            bogustext = ("Fonte da notícia: %s" % get_domain(url))
+            p = Paragraph(bogustext, style)
+            Story.append(p)
+            bogustext = ("Url da notícia: %s" % url)
+            p = Paragraph(bogustext, style)
+            Story.append(p)
+            Story.append(Spacer(1,0.2*inch))
+        doc.build(Story)
 
-    fs = FileSystemStorage("/tmp")
-    with fs.open("somefilename.pdf") as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
-        return response
+        fs = FileSystemStorage("/tmp")
+        with fs.open("relatorioNOTICIAS%s.pdf" %time) as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = ('attachment; filename="relatorioNOTICIAS%s.pdf"' %time)
+            return response
 
     return response

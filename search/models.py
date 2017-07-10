@@ -19,7 +19,7 @@ mg.connect(
     host=       MONGO_DATABASE['host'],
 )
 
-    
+
 @python_2_unicode_compatible
 class Article(mg.Document):
     url = mg.StringField(max_length=200, required=True, validators=[MinLengthValidator(1)])
@@ -69,11 +69,8 @@ class Query(models.Model):
     def get(self, field):
         return json.JSONDecoder().decode(getattr(self, field))
 
-    def get_engines(self):
+    def get_engines_formated(self):
         return ", ".join(self.get('engines'))
-
-    def get_entities_formated(self):
-        return ", ".join(self.get('entities'))
 
     def set(self, field, list):
         setattr(self, field, json.dumps(list))

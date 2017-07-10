@@ -10,7 +10,7 @@
   <center>
     <li style="color:green"> Você pesquisou: {{query.get_entities_formated}}
     <br>
-    Na data: {{query.time}} | No(s) site(s): {{query.get_engines}}
+    Na data: {{query.time}} | No(s) site(s): {{query.get_engines_formated}}
     </li>
     <br>
     <form method="get" action={% url 'search:index' %}>

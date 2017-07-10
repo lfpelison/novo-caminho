@@ -1,7 +1,7 @@
 {% extends "search/base.html" %}
 {% load bootstrap3 %}
 {% load static %}
-
+{% load search_extras %}
 {% block content %}
 
 
@@ -81,7 +81,15 @@
         </div>
    </div>
 
-
+   <ul class="pagination">
+     {% if page > 1 %}
+       <li><a href="{% goto_page page|add:"-1" %}">Anterior</a></li>
+     {% endif %}
+     <li class="active"><a href="{% goto_page page %}">{{page}}</a></li>
+     <li><a href="{% goto_page page|add:"1" %}">{{page|add:"1"}}</a></li>
+     <li><a href="{% goto_page page|add:"2" %}">{{page|add:"2"}}</a></li>
+     <li><a href="{% goto_page page|add:"3" %}">{{page|add:"3"}}</a></li>
+   </ul>
 
   {% if error_message %}
   <div class="alert alert-danger" role="alert">

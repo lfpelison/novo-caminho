@@ -49,9 +49,7 @@ def check_articles_db(urls, entities):
 
 
 def get_domain(url):
-    parsed_uri = urlparse(url)
-    domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
-    return domain
+    return urlparse(url).netloc
 
 @login_required
 def index(request):
@@ -132,7 +130,7 @@ def configuration(request):
 
 
 @login_required
-def keyword(request):
+def create_keyword(request):
     if request.method == "POST":
         form = KeywordForm(request.POST)
         if form.is_valid():
@@ -142,11 +140,25 @@ def keyword(request):
     return redirect(reverse('search:config'))
 
 @login_required
-def ignored(request):
+def create_ignored(request):
     if request.method == "POST":
         form = IgnoredDomainForm(request.POST)
         if form.is_valid():
             form.instance.name = form.instance.name.lower()
             form.instance.user = request.user
             print form.save()
+    return redirect(reverse('search:config'))
+
+@login_required
+def delete_keyword(request):
+    if request.method == "POST":
+        keyword_id = request.POST['keyword_id']
+        Keyword.objects.get(pk=keyword_id).delete()
+    return redirect(reverse('search:config'))
+
+@login_required
+def delete_ignored(request):
+    if request.method == "POST":
+        ignored_id = request.POST['ignored_id']
+        IgnoredDomain.objects.get(pk=ignored_id).delete()
     return redirect(reverse('search:config'))

@@ -15,7 +15,7 @@
           <li><center><a href="{% url 'dashboard:logout' %}">{% bootstrap_button content='Logout'%}</a></center></li>
         </ul>
       </span>
-      
+
   <form method="get" style="background-color:#e2e2e2" class="well">
       {{form.query}}
       <input type="submit" value="Pesquisar" class="btn btn-primary btn-xl page-scroll">
@@ -47,6 +47,8 @@
             <div id="keywords">
               {{form.keywords}}
             </div>
+
+            <a href="{% url 'search:download' %}" class="page-scroll btn btn-default btn-xl sr-button">Gerar Relatório</a>
         </div>
    </div>
   </form>

@@ -11,5 +11,6 @@ app_name = 'search'
 urlpatterns = [
     surl('/', views.index, name='index'),
     surl('history/', views.history, name='history'),
+    surl('download/', views.download, name='download'),
 
 ]

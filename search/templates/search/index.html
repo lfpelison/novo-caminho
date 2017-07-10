@@ -58,8 +58,11 @@
 
           </div>
             <div class="row" id="risk_bar">
-            <h2>Risco:</h2>
+              {% if risks %}
+              <h2>Risco:</h2>
+              {% endif %}
               {% for entity, risk in risks.iteritems %}
+
               <div class="container">
                   <div class="row">
                       <div class="col-md-6">

@@ -10,17 +10,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from forms import SearchForm
 from models import Article
-from sklearn.externals import joblib
 import time
-import pandas as pd
-from sklearn.linear_model import LogisticRegression
-import numpy as np
-
-def category_map(cat):
-    art = {'category':'Nothing'}
-    cat_template = {1:'Manifestacao', 2:'Crime', 3:'Economia', 4:'Politica', 5:'Dano-Ambiental', 6:'Positiva'}
-    art['category'] = cat_template[int(cat)]
-    return art['category']
+from datascience.news_classifier import NewsClassifier
 
 @login_required
 def index(request):
@@ -49,21 +40,12 @@ def index(request):
                     article_in_db.entities = list(set(article_in_db.entities).union(set(entities))) # gets the union between the entities
                     article_in_db.save()
                     articles_to_display.append(article_in_db)
-            #Load predictions models
-            risk_classifier = joblib.load('datascience/risk_classifier.cls')
-            category_classifier = joblib.load('datascience/category_classifier.cls')
-            risk_voc = joblib.load("datascience/risk_voc.cls")
-            cat_voc = joblib.load("datascience/cat_voc.cls")
 
             #Get articl es
             articles_from_search = get_articles(urls_not_in_db)
             for art in articles_from_search:
-                risk_summary_dtm = risk_voc.transform([art.summary])
-                cat_summary_dtm = cat_voc.transform([art.summary])
-                art_risk = risk_classifier.predict(risk_summary_dtm)
-                art_category = category_classifier.predict(cat_summary_dtm)
-                art_category = category_map(art_category)
-                saved_article = Article().fill_and_create(art, entities, art_risk, art_category)
+                predictions = NewsClassifier().news_predictions(art.summary)
+                saved_article = Article().fill_and_create(art, entities, predictions['risk'], predictions['category'])
                 if saved_article is not None:
                     print "SAVED AN ARTICLE: {0}".format(saved_article)
                     articles_to_display.append(saved_article)

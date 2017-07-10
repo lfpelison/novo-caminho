@@ -31,29 +31,42 @@
             {% for article in articles %}
               <li><a style:"font-size:1" href="{{article.url}}">{{article.title}}</a></li>
               {{article.short_summary}}...
-              <p style="color:green">{{article.url|urlizetrunc:30}} | Publicada em: {{article.publish_date}} </p>
+              <p style="color:green">{{article.url|urlizetrunc:30}} {% if article.publish_date is not None %}| Publicada em: {{article.publish_date}}{% endif %} </p>
               <hr>
             {% endfor %}
             </ol>
+
+            <center>
+            <ul class="pagination">
+              {% if page > 1 %}
+                <li><a href="{% goto_page page|add:"-1" %}">Anterior</a></li>
+              {% endif %}
+              <li class="active"><a href="{% goto_page page %}">{{page}}</a></li>
+              <li><a href="{% goto_page page|add:"1" %}">{{page|add:"1"}}</a></li>
+              <li><a href="{% goto_page page|add:"2" %}">{{page|add:"2"}}</a></li>
+              <li><a href="{% goto_page page|add:"3" %}">{{page|add:"3"}}</a></li>
+            </ul>
+            </center>
         </div>
 
         <div class="col-xs-5" style="border-left:3px solid #e2e2e2;height:1430px"> <!-- div da direita -->
-          <div class"row">
+          <div class="row">
             <br>
             <br>
-
-            <div id="engines">
-              {{form.engines}}
-            </div>
-            <div id="keywords">
-              {{form.keywords}}
-            </div>
-            <div id="categories">
-              {% for category,count in categories.iteritems %}
-                  <div class="badge">
-                    <span style="vertical-align:-webkit-baseline-middle">{{category}}<span class="badge">{{count}}</span></span>
-                  </div>
-              {% endfor %}
+            <div class="row">
+                <div id="engines">
+                  {{form.engines}}
+                </div>
+                <div id="keywords">
+                  {{form.keywords}}
+                </div>
+		<div id="categories">
+		      {% for category,count in categories.iteritems %}
+			  <div class="badge">
+			    <span style="vertical-align:-webkit-baseline-middle">{{category}}<span class="badge">{{count}}</span></span>
+			  </div>
+		      {% endfor %}
+		</div>
             </div>
 	    </form>
             <form method="get" action= {% url 'search:download' %}>
@@ -65,6 +78,12 @@
 
           </div>
             <div class="row" id="risk_bar">
+                <center><form method="get" action= {% url 'search:download' %}>
+                     {% for url in urls %}
+                        <input type="hidden" name="article_url" value="{{url}}">
+                     {% endfor %}
+                     <button type="submit" class="page-scroll btn btn-default btn-xl sr-button"> Gerar Relatório</button>
+                </form></center>
               {% if risks %}
               <h2>Risco:</h2>
               {% endif %}
@@ -88,15 +107,7 @@
         </div>
    </div>
 
-   <ul class="pagination">
-     {% if page > 1 %}
-       <li><a href="{% goto_page page|add:"-1" %}">Anterior</a></li>
-     {% endif %}
-     <li class="active"><a href="{% goto_page page %}">{{page}}</a></li>
-     <li><a href="{% goto_page page|add:"1" %}">{{page|add:"1"}}</a></li>
-     <li><a href="{% goto_page page|add:"2" %}">{{page|add:"2"}}</a></li>
-     <li><a href="{% goto_page page|add:"3" %}">{{page|add:"3"}}</a></li>
-   </ul>
+   
 
   {% if error_message %}
   <div class="alert alert-danger" role="alert">

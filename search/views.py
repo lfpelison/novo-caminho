@@ -19,6 +19,7 @@ from django.core.files.storage import FileSystemStorage
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
+from urlparse import urlparse
 
 
 def save_articles(articles, entities):
@@ -46,12 +47,18 @@ def check_articles_db(urls, entities):
     return [articles_to_display, urls_not_in_db]
 
 
+def get_domain(url):
+    parsed_uri = urlparse(url)
+    domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+    return domain
+
 @login_required
 def index(request):
     form = SearchForm(user=request.user)
     context = {'form': form}
     if request.method == 'GET':
         start = time.time()
+
         form = SearchForm(request.GET,user=request.user)
         if form.is_valid():
             entities = [e.strip(' ') for e in form.cleaned_data['query'].split(',')] # Split and clean query
@@ -59,11 +66,12 @@ def index(request):
             keywords = form.cleaned_data['keywords']
             search_keys = entities + keywords
             # page = self.request.GET.get('page', 1)
-            urls = get_urls(search_keys, search_engines, range(1)) ## TODO: remove forbidden URLs from list
-                                                                ## TODO: pagination
-                                                                ## TODO: categories and risk
-            urls_not_in_db = []
-            articles_to_display = []
+            urls = get_urls(search_keys, search_engines, range(1))
+            ## TODO: pagination
+            ## TODO: print risk bar
+
+            ignored_domains = [ign.name for ign in request.user.ignoreddomain_set.all()]                 # Gets all IgnoredDomains from User
+            urls = [url for url in urls if get_domain(url) not in ignored_domains] # Gets the non-ignored URLs
 
             [articles_to_display, urls_not_in_db] = check_articles_db(urls, entities)   # checks the URLs from the search, and returns the Articles
                                                                                         # already stored, as well as the URLs th(at are not stored

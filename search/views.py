@@ -94,22 +94,28 @@ def index(request):
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
             context['risks'] = calculate_risk(entities)
             for entity in entities:
-                context['risks'][entity] = int(100*(context['risks'][entity]-1)/2) #Format to percent
+                context['risks'][entity] = int(100*(context['risks'][entity]-1)/2) # Format to percent
 
             if saved_articles:
                 articles_to_display += saved_articles                       # show the just saved Articles
 
             if 'dont_save_query' not in request.GET:
                 query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
-                print query
-                print articles_to_display
-            context['articles'] = [art for art in articles_to_display if art.category != "Positiva"] 
+            articles_to_display = [art for art in articles_to_display if art.category != "Positiva"]
+            context['articles'] = articles_to_display
             context['urls'] = urls
+            categories_dict = {}
+            for art in articles_to_display:
+                if art.category not in categories_dict.keys():
+                    categories_dict[art.category] = 1
+                else:
+                    categories_dict[art.category] += 1
+            context['categories'] = categories_dict
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
         else:
             print "-----FORMULARIO INVALIDO------"
-        
+
     return render(request, 'search/index.html', context)
 
 

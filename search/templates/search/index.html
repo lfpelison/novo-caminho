@@ -48,6 +48,13 @@
             <div id="keywords">
               {{form.keywords}}
             </div>
+            <div id="categories">
+              {% for category,count in categories.iteritems %}
+                  <div class="badge">
+                    <span style="vertical-align:-webkit-baseline-middle">{{category}}<span class="badge">{{count}}</span></span>
+                  </div>
+              {% endfor %}
+            </div>
 	    </form>
             <form method="get" action= {% url 'search:download' %}>
                  {% for url in urls %}

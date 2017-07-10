@@ -55,12 +55,15 @@
             <br>
             <div class="row">
                 <div id="engines">
+                    <p> Selecione pelo menos 1 site: </p>
                   {{form.engines}}
                 </div>
                 <div id="keywords">
+                    <p> Escolha as palavras-chave: </p>
                   {{form.keywords}}
                 </div>
 		<div id="categories">
+            <p> Número de notícias por categoria </p>
 		      {% for category,count in categories.iteritems %}
 			  <div class="badge">
 			    <span style="vertical-align:-webkit-baseline-middle">{{category}}<span class="badge">{{count}}</span></span>
@@ -69,22 +72,16 @@
 		</div>
             </div>
 	    </form>
-            {% if articles %}
-            <form method="get" action= {% url 'search:download' %}>
-                 {% for url in urls %}
-                    <input type="hidden" name="article_url" value="{{url}}">
-                 {% endfor %}
-                 <button type="submit" class="page-scroll btn btn-default btn-xl sr-button"> Gerar Relatório</button>
-            </form>
-            {% endif %}
           </div>
             <div class="row" id="risk_bar">
+                {% if articles %}
                 <center><form method="get" action= {% url 'search:download' %}>
                      {% for url in urls %}
                         <input type="hidden" name="article_url" value="{{url}}">
                      {% endfor %}
                      <button type="submit" class="page-scroll btn btn-default btn-xl sr-button"> Gerar Relatório</button>
                 </form></center>
+                {% endif %}
               {% if risks %}
               <h2>Risco:</h2>
               {% endif %}
@@ -108,7 +105,7 @@
         </div>
    </div>
 
-   
+
 
   {% if error_message %}
   <div class="alert alert-danger" role="alert">

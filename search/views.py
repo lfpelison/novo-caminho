@@ -13,13 +13,12 @@ from models import Article, Query, Keyword
 import time, sys, json
 from reportlab.pdfgen import canvas
 from io import BytesIO
-
 from django.core.files.storage import FileSystemStorage
-
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from urlparse import urlparse
+from datascience.news_classifier import NewsClassifier
 
 
 def save_articles(articles, entities):
@@ -52,6 +51,15 @@ def get_domain(url):
     domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
     return domain
 
+def calculate_risk(entities):
+    risk = {}
+    for entity in entities:
+        articles = [art for art in Article.objects.all() if entity in art.entities]
+        l=[art.risk for art in articles if art.risk != None]
+        risk[entity] = float(sum(l))/len(l)
+    return risk
+
+
 @login_required
 def index(request):
     form = SearchForm(user=request.user)
@@ -78,12 +86,14 @@ def index(request):
 
             articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
+            context['risk'] = calculate_risk(entities)
+            for entity in entities:
+                context['risk'][entity] = int(100*(context['risk'][entity]-1)/2) #Format to percent
+
             articles_to_display.append(saved_articles)                      # show the just saved Articles
 
             query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
-            print query
-            print search_keys
-            print articles_to_display
+
             context['articles'] = articles_to_display
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)

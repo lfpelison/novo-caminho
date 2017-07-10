@@ -24,7 +24,8 @@ from reportlab.lib.units import inch
 def save_articles(articles, entities):
     saved_articles = []
     for art in articles:
-        saved_article = Article().fill_and_create(art, entities)
+        predictions = NewsClassifier().news_predictions(art.summary)
+        saved_article = Article().fill_and_create(art, entities, predictions['risk'], predictions['category'])
         if saved_article is not None:
             print "SAVED AN ARTICLE: {0}".format(saved_article).encode('utf-8')
             sys.stdout.flush()

@@ -11,5 +11,7 @@ app_name = 'search'
 urlpatterns = [
     surl('/', views.index, name='index'),
     surl('history/', views.history, name='history'),
-
+    surl('config/', views.configuration, name='config'),
+    surl('keyword/', views.keyword, name='keyword'),
+    surl('ignored/', views.ignored, name='ignored'),
 ]

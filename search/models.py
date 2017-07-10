@@ -68,6 +68,12 @@ class Query(models.Model):
     def get(self, field):
         return json.JSONDecoder().decode(getattr(self, field))
 
+    def get_engines(self):
+        return ", ".join(self.get('engines'))
+
+    def get_entities_formated(self):
+        return ", ".join(self.get('entities'))
+
     def set(self, field, list):
         setattr(self, field, json.dumps(list))
 

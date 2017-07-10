@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from news_scrapper.search_urls import get_urls
 from news_scrapper.url_parser import get_articles
@@ -11,6 +11,14 @@ from django.contrib.auth.decorators import login_required
 from forms import SearchForm
 from models import Article, Query, Keyword
 import time, sys, json
+from reportlab.pdfgen import canvas
+from io import BytesIO
+
+from django.core.files.storage import FileSystemStorage
+
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
 
 
 def save_articles(articles, entities):
@@ -43,7 +51,6 @@ def index(request):
     context = {'form': form}
     if request.method == 'GET':
         start = time.time()
-
         form = SearchForm(request.GET,user=request.user)
         if form.is_valid():
             entities = [e.strip(' ') for e in form.cleaned_data['query'].split(',')] # Split and clean query
@@ -71,9 +78,34 @@ def index(request):
             context['articles'] = articles_to_display
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
+        else:
+            print "-----FORMULARIO INVALIDO------"
     return render(request, 'search/index.html', context)
+
+
 
 @login_required
 def history(request):
     context = {'queries':request.user.query_set.all()}
     return render(request, 'search/history.html', context)
+
+@login_required
+def download(request):
+    doc = SimpleDocTemplate("/tmp/somefilename.pdf")
+    styles = getSampleStyleSheet()
+    Story = [Spacer(1,2*inch)]
+    style = styles["Normal"]
+    for i in range(100):
+       bogustext = ("This is Paragraph number %s.  " % i) * 20
+       p = Paragraph(bogustext, style)
+       Story.append(p)
+       Story.append(Spacer(1,0.2*inch))
+    doc.build(Story)
+
+    fs = FileSystemStorage("/tmp")
+    with fs.open("somefilename.pdf") as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+        return response
+
+    return response

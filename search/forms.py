@@ -15,8 +15,7 @@ class SearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         super(SearchForm, self).__init__(*args, **kwargs)
-        self.fields['keywords'] = forms.MultipleChoiceField(
-            label="Selecione pelo menos 1",
+        self.fields['keywords'] = forms.MultipleChoiceField(required=False,
             choices=[ (o.name, str(o.name)) for o in Keyword.objects.filter(user=user)],
             widget=forms.CheckboxSelectMultiple(),
             )

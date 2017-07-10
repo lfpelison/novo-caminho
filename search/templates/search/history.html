@@ -15,10 +15,10 @@
     <br>
     <form method="get" action={% url 'search:index' %}>
       {% for engine in query.get_engines %}
-      <input type="hidden" name="engines" value={{engine}}>
+        <input type="hidden" name="engines" value="{{engine}}">
       {% endfor %}
       <input type="hidden" name="query" value="{{query.get_entities_formated}}">
-      <input type="hidden" name="save_query" value="False">
+      <input type="hidden" name="dont_save_query" value="1">
       <button type="submit" class="page-scroll btn btn-default btn-xl sr-button"> Refaça a busca!</button>
     </form>
   </center>
@@ -26,5 +26,3 @@
   {% endfor %}
 </ol>
 {% endblock %}
-
-{#<a href={% url 'search:index' %} class="page-scroll btn btn-default btn-xl sr-button">Refaça a busca!</a> #}

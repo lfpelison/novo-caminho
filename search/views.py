@@ -63,7 +63,7 @@ def index(request):
             articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
             articles_to_display.append(saved_articles)                      # show the just saved Articles
-            if request.GET['save_query'] != "False":
+            if 'dont_save_query' not in request.GET:
                 query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
                 print query
                 print articles_to_display

@@ -19,9 +19,13 @@ from django.http import HttpResponseRedirect
 
 def index(request):
     reset_password = False
+    ## GAMBIARRA
     domain = request.META['HTTP_HOST']
-    if ((domain+"/password_reset/") in str(HttpResponseRedirect(request.META.get('HTTP_REFERER'))).split("http://", 1)[1]):
-        reset_password = True
+    referrer = str(HttpResponseRedirect(request.META.get('HTTP_REFERER'))).split("http://", 1)
+    if len(referrer)>1:
+        if (domain+"/password_reset/") in referrer[1]:
+            reset_password = True
+    ## END GAMBIARRA
     if request.user.is_authenticated:
         return redirect(reverse('search:index'))
     return render(request, 'dashboard/index.html', {'reset_password':reset_password})

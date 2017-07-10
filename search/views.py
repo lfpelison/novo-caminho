@@ -9,7 +9,7 @@ from django.views import generic, View
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from forms import SearchForm
-from models import Article, Query
+from models import Article, Query, Keyword
 import time, sys, json
 
 
@@ -39,18 +39,19 @@ def check_articles_db(urls, entities):
 
 @login_required
 def index(request):
-    form = SearchForm()
+    form = SearchForm(user=request.user)
     context = {'form': form}
     if request.method == 'GET':
         start = time.time()
 
-        form = SearchForm(request.GET)
+        form = SearchForm(request.GET,user=request.user)
         if form.is_valid():
             entities = [e.strip(' ') for e in form.cleaned_data['query'].split(',')] # Split and clean query
             search_engines = form.cleaned_data['engines']
-
+            keywords = form.cleaned_data['keywords']
+            search_keys = entities + keywords
             # page = self.request.GET.get('page', 1)
-            urls = get_urls(entities, search_engines, range(1)) ## TODO: remove forbidden URLs from list
+            urls = get_urls(search_keys, search_engines, range(1)) ## TODO: remove forbidden URLs from list
                                                                 ## TODO: pagination
                                                                 ## TODO: categories and risk
             urls_not_in_db = []
@@ -65,11 +66,12 @@ def index(request):
 
             query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
             print query
+            print search_keys
             print articles_to_display
             context['articles'] = articles_to_display
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
-    return render(request, 'search/index2.html', context)
+    return render(request, 'search/index.html', context)
 
 @login_required
 def history(request):

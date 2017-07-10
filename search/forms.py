@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
-
+from search.models import Keyword
 
 class SearchForm(forms.Form):
     ENGINES = (
@@ -12,3 +12,11 @@ class SearchForm(forms.Form):
     engines = forms.MultipleChoiceField(label="Selecione pelo menos 1", choices=ENGINES,
             required=True, error_messages={'required': 'Por favor, preenche pelo menos uma fonte de buscas'},
             widget=forms.CheckboxSelectMultiple(), initial=('google',))
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(SearchForm, self).__init__(*args, **kwargs)
+        self.fields['keywords'] = forms.MultipleChoiceField(
+            label="Selecione pelo menos 1",
+            choices=[ (o.name, str(o.name)) for o in Keyword.objects.filter(user=user)],
+            widget=forms.CheckboxSelectMultiple(),
+            )

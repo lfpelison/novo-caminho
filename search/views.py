@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from forms import SearchForm
 from models import Article, Query, Keyword
 import time, sys, json
+from urlparse import urlparse
 
 
 def save_articles(articles, entities):
@@ -37,6 +38,11 @@ def check_articles_db(urls, entities):
     return [articles_to_display, urls_not_in_db]
 
 
+def get_domain(url):
+    parsed_uri = urlparse(url)
+    domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+    return domain
+
 @login_required
 def index(request):
     form = SearchForm(user=request.user)
@@ -51,14 +57,16 @@ def index(request):
             keywords = form.cleaned_data['keywords']
             search_keys = entities + keywords
             # page = self.request.GET.get('page', 1)
-            urls = get_urls(search_keys, search_engines, range(1)) ## TODO: remove forbidden URLs from list
-                                                                ## TODO: pagination
-                                                                ## TODO: categories and risk
-            urls_not_in_db = []
-            articles_to_display = []
+            urls = get_urls(search_keys, search_engines, range(1))
+            ## TODO: pagination
+            ## TODO: categories and risk
 
+            ignored_domains = [ign.name for ign in request.user.ignoreddomain_set.all()]                 # Gets all IgnoredDomains from User
+            print ignored_domains
+            urls = [url for url in urls if get_domain(url) not in ignored_domains] # Gets the non-ignored URLs
+            print [url for url in urls if get_domain(url) in ignored_domains]
             [articles_to_display, urls_not_in_db] = check_articles_db(urls, entities)   # checks the URLs from the search, and returns the Articles
-                                                                                        # already stored, as well as the URLs th(at are not stored
+                                                                                        # already stored, as well as the URLs that are not stored
 
             articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them

@@ -13,12 +13,11 @@ from models import Article, Query, Keyword
 import time, sys, json
 from reportlab.pdfgen import canvas
 from io import BytesIO
-<<<<<<< HEAD
 from time import gmtime, strftime
 
-=======
+
 from datascience.news_classifier import NewsClassifier
->>>>>>> 21aad1cedc77eb5c602ac26e0ff10ca4e981c757
+
 
 from django.core.files.storage import FileSystemStorage
 
@@ -109,7 +108,6 @@ def get_domain(url):
 
 @login_required
 def download(request):
-<<<<<<< HEAD
     #form = ReportForm()
     #context = {'form': form}
     if request.method == 'GET':
@@ -136,9 +134,18 @@ def download(request):
                 bogustext = ("Data de publicação: %s." % article_in_db.publish_date)
                 p = Paragraph(bogustext, style)
                 Story.append(p)
-            bogustext = ("Risco dessa notícia: %s." % article_in_db.risk)
-            p = Paragraph(bogustext, style)
-            Story.append(p)
+            if article_in_db.risk == 1:
+                bogustext = "Risco dessa notícia: Baixo."
+                p = Paragraph(bogustext, style)
+                Story.append(p)
+            elif article_in_db.risk == 2:
+                bogustext = "Risco dessa notícia: Médio."
+                p = Paragraph(bogustext, style)
+                Story.append(p)
+            elif article_in_db.risk == 3:
+                bogustext = "Risco dessa notícia: Alto."
+                p = Paragraph(bogustext, style)
+                Story.append(p)
             bogustext = "Entidades envolvidas na notícia: "
             for entity in article_in_db.entities:
                 bogustext += ("%s " %entity)
@@ -161,26 +168,6 @@ def download(request):
             response = HttpResponse(pdf, content_type='application/pdf')
             response['Content-Disposition'] = ('attachment; filename="relatorioNOTICIAS%s.pdf"' %time)
             return response
-
-=======
-    doc = SimpleDocTemplate("/tmp/somefilename.pdf")
-    styles = getSampleStyleSheet()
-    Story = [Spacer(1,2*inch)]
-    style = styles["Normal"]
-    for i in range(100):
-       bogustext = ("This is Paragraph number %s.  " % i) * 20
-       p = Paragraph(bogustext, style)
-       Story.append(p)
-       Story.append(Spacer(1,0.2*inch))
-    doc.build(Story)
-
-    fs = FileSystemStorage("/tmp")
-    with fs.open("somefilename.pdf") as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
-        return response
->>>>>>> 21aad1cedc77eb5c602ac26e0ff10ca4e981c757
-    return response
 
 
 @login_required

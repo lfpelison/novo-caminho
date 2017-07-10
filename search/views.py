@@ -103,13 +103,13 @@ def index(request):
                 query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
                 print query
                 print articles_to_display
-            context['articles'] = articles_to_display
+            context['articles'] = [art for art in articles_to_display if art.category != "Positiva"] 
             context['urls'] = urls
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)
         else:
             print "-----FORMULARIO INVALIDO------"
-
+        
     return render(request, 'search/index.html', context)
 
 

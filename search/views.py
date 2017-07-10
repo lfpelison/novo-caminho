@@ -46,7 +46,6 @@ def index(request):
     if request.method == 'GET':
         start = time.time()
         form = SearchForm(request.GET)
-
         if form.is_valid():
             entities = [e.strip(' ') for e in form.cleaned_data['query'].split(',')] # Split and clean query
             search_engines = form.cleaned_data['engines']
@@ -64,10 +63,10 @@ def index(request):
             articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
             articles_to_display.append(saved_articles)                      # show the just saved Articles
-
-            query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
-            print query
-            print articles_to_display
+            if request.GET['save_query'] != "False":
+                query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
+                print query
+                print articles_to_display
             context['articles'] = articles_to_display
             loadingpagetime = time.time() - start
             print "LOADING PAGE TIME: {0}".format(loadingpagetime)

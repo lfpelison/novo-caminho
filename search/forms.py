@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from search.models import Keyword
+from search.models import *
 
 class SearchForm(forms.Form):
     ENGINES = (
@@ -19,3 +19,16 @@ class SearchForm(forms.Form):
             choices=[ (o.name, str(o.name)) for o in Keyword.objects.filter(user=user)],
             widget=forms.CheckboxSelectMultiple(),
             )
+
+class KeywordForm(forms.ModelForm):
+    name = forms.CharField(max_length=100, required=True, label="Palavra-chave:")
+    class Meta:
+        model = Keyword
+        fields = ['name']
+
+
+class IgnoredDomainForm(forms.ModelForm):
+    name = forms.CharField(max_length=100, required=True, label="Domínio para excluir da busca:")
+    class Meta:
+        model = IgnoredDomain
+        fields = ['name']

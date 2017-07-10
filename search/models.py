@@ -30,9 +30,9 @@ class Article(mg.Document):
     entities = mg.ListField()
     category = mg.StringField(max_length=20)
     def __str__(self):
-        return "Titulo: {0}  ///  {1}".format(self.title,self.short_summary)
+        return "URL: {0}\n".format(self.url)
 
-    def fill_and_create(self, article, entities):
+    def fill_and_create(self, article, entities, risk, category):
         if article.title != "" and article.summary != "" and article.url != "":
             self.url=article.url
             self.short_summary=article.summary[:200]
@@ -40,6 +40,8 @@ class Article(mg.Document):
             self.title=article.title
             self.entities= entities
             self.publish_date= article.publish_date
+            self.risk = risk
+            self.category = category
             self.save()
             return self
         else:
@@ -65,6 +67,13 @@ class Query(models.Model):
 
 @python_2_unicode_compatible
 class Keyword(models.Model):
+    name = models.CharField(max_length=100, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    def __str__(self):
+        return "Name: {0}, User{1}".format(self.name,self.user)
+
+@python_2_unicode_compatible
+class IgnoredDomain(models.Model):
     name = models.CharField(max_length=100, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):

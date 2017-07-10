@@ -1,0 +1,40 @@
+{% extends "search/base.html" %}
+
+{% block content %}
+<div id="titulo">
+<center><p> Página de Configuração </p></center>
+</div>
+<hr>
+  <form method="post" action="{% url 'search:create_keyword'%}">
+    {% csrf_token %}
+    {{ keyword_form.as_p }}
+    <input type="submit">
+  </form>
+  {% for keyword in keywords %}
+    <form method="post" action="{% url 'search:delete_keyword'%}">
+      {% csrf_token %}
+      <input type="hidden" name="keyword_id" value={{keyword.id}}>
+      <div class="badge">
+        <span style="vertical-align:-webkit-baseline-middle">{{keyword.name|upper}}</span>
+        <button type="submit" class="close">&times;</button>
+      </div>
+    </form>
+  {% endfor %}
+<hr style="height:1px;border:none;background-color:#bfbfbf;width:93%">
+
+  <form method="post" action="{% url 'search:create_ignored'%}">
+    {% csrf_token %}
+    {{ ignored_form.as_p }}
+    <input type="submit">
+  </form>
+{% for ignored_domain in ignored_domains %}
+  <form method="post" action="{% url 'search:delete_ignored'%}">
+    {% csrf_token %}
+    <input type="hidden" name="ignored_id" value={{ignored_domain.id}}>
+    <div class="badge">
+      <span style="vertical-align:-webkit-baseline-middle">{{ignored_domain.name}}</span>
+      <button type="submit" class="close">&times;</button>
+    </div>
+  </form>
+{% endfor %}
+{% endblock %}

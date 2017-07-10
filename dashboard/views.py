@@ -13,13 +13,22 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
 def index(request):
+    reset_password = False
+    ## GAMBIARRA
+    domain = request.META['HTTP_HOST']
+    referrer = str(HttpResponseRedirect(request.META.get('HTTP_REFERER'))).split("http://", 1)
+    if len(referrer)>1:
+        if (domain+"/password_reset/") in referrer[1]:
+            reset_password = True
+    ## END GAMBIARRA
     if request.user.is_authenticated:
         return redirect(reverse('search:index'))
-    return render(request, 'dashboard/index.html')
+    return render(request, 'dashboard/index.html', {'reset_password':reset_password})
 
 def about(request):
     return render(request, 'dashboard/about.html')

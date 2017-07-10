@@ -59,6 +59,7 @@ def get_domain(url):
 def index(request):
     form = SearchForm(user=request.user)
     context = {'form': form}
+
     if request.method == 'GET':
         start = time.time()
 
@@ -82,12 +83,12 @@ def index(request):
             articles_from_search = get_articles(urls_not_in_db)             # downloads "Newspaper Articles" from the URLs given
             saved_articles = save_articles(articles_from_search, entities)  # saves the "Newspaper Articles" into "Django Articles" and returns them
             if saved_articles:
-                articles_to_display.append(saved_articles)                      # show the just saved Articles
+                articles_to_display.append(saved_articles)                       # show the just saved Articles
 
-            query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
-            print query
-            print search_keys
-            print articles_to_display
+            if 'dont_save_query' not in request.GET:
+                query = Query.objects.create(name="Pesquisa sobre {0}".format(entities), user=request.user, entities=json.dumps(entities), engines=json.dumps(search_engines))
+                print query
+                print articles_to_display
             context['articles'] = articles_to_display
             context['urls'] = urls
             loadingpagetime = time.time() - start
@@ -101,9 +102,6 @@ def index(request):
 def history(request):
     context = {'queries':request.user.query_set.all()}
     return render(request, 'search/history.html', context)
-
-def get_domain(url):
-    return urlparse(url).netloc
 
 
 @login_required

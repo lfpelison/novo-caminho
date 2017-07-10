@@ -59,6 +59,12 @@ class Query(models.Model):
     def __str__(self):
         return "User: {0}, Name: {1}, Time: {2}, Entities: {3}, Engines: {4}".format(str(self.user), self.name, str(self.time), str(self.entities), str(self.engines))
 
+    def get_engines(self):
+        return self.get('engines')
+
+    def get_entities_formated(self):
+        return ",".join(self.get('entities'))
+
     def get(self, field):
         return json.JSONDecoder().decode(getattr(self, field))
 

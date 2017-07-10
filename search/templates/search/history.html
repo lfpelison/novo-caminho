@@ -13,7 +13,14 @@
     Na data: {{query.time}} | No(s) site(s): {{query.engines}}
     </li>
     <br>
-    <a href= {% url 'search:index' %} class="page-scroll btn btn-default btn-xl sr-button">Refaça a busca!</a>
+    <form method="get" action={% url 'search:index' %}>
+      {% for engine in query.get_engines %}
+        <input type="hidden" name="engines" value="{{engine}}">
+      {% endfor %}
+      <input type="hidden" name="query" value="{{query.get_entities_formated}}">
+      <input type="hidden" name="dont_save_query" value="1">
+      <button type="submit" class="page-scroll btn btn-default btn-xl sr-button"> Refaça a busca!</button>
+    </form>
   </center>
 <hr style="height:1px;border:none;background-color:#bfbfbf;width:93%">
   {% endfor %}

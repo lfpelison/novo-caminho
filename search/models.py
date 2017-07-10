@@ -19,6 +19,7 @@ mg.connect(
     host=       MONGO_DATABASE['host'],
 )
 
+    
 @python_2_unicode_compatible
 class Article(mg.Document):
     url = mg.StringField(max_length=200, required=True, validators=[MinLengthValidator(1)])

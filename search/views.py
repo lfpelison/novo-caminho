@@ -25,6 +25,9 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from urlparse import urlparse
+import logging
+import traceback
+
 
 
 
@@ -143,46 +146,47 @@ def download(request):
         Story.append(p)
         Story.append(Spacer(1,0.2*inch))
         for i, url in enumerate(urls):
-            article_in_db = Article.objects.filter(url=url).first()
-            bogustext = ("%d. Título da notícia: %s." % (i+1, article_in_db.title))
-            p = Paragraph(bogustext, style)
-            Story.append(p)
-            bogustext = ("Resumo da notícia: %s." % article_in_db.long_summary)
-            p = Paragraph(bogustext, style)
-            Story.append(p)
-            if article_in_db.publish_date != None:
-                bogustext = ("Data de publicação: %s." % article_in_db.publish_date)
+            article_in_db = Article.objects.filter(url=str(url)).first()
+            if article_in_db is not None:
+                bogustext = ("%d. Título da notícia: %s." % (i+1, article_in_db.title))
                 p = Paragraph(bogustext, style)
                 Story.append(p)
-            if article_in_db.risk == 1:
-                bogustext = "Risco dessa notícia: Baixo."
+                bogustext = ("Resumo da notícia: %s." % article_in_db.long_summary)
                 p = Paragraph(bogustext, style)
                 Story.append(p)
-            elif article_in_db.risk == 2:
-                bogustext = "Risco dessa notícia: Médio."
+                if article_in_db.publish_date != None:
+                    bogustext = ("Data de publicação: %s." % article_in_db.publish_date)
+                    p = Paragraph(bogustext, style)
+                    Story.append(p)
+                if article_in_db.risk == 1:
+                    bogustext = "Risco dessa notícia: Baixo."
+                    p = Paragraph(bogustext, style)
+                    Story.append(p)
+                elif article_in_db.risk == 2:
+                    bogustext = "Risco dessa notícia: Médio."
+                    p = Paragraph(bogustext, style)
+                    Story.append(p)
+                elif article_in_db.risk == 3:
+                    bogustext = "Risco dessa notícia: Alto."
+                    p = Paragraph(bogustext, style)
+                    Story.append(p)
+                bogustext = "Entidades envolvidas na notícia: "
+                for entity in article_in_db.entities:
+                    bogustext += ("%s " %entity)
                 p = Paragraph(bogustext, style)
                 Story.append(p)
-            elif article_in_db.risk == 3:
-                bogustext = "Risco dessa notícia: Alto."
+                bogustext = ("Categoria da notícia: %s." % article_in_db.category)
                 p = Paragraph(bogustext, style)
                 Story.append(p)
-            bogustext = "Entidades envolvidas na notícia: "
-            for entity in article_in_db.entities:
-                bogustext += ("%s " %entity)
-            p = Paragraph(bogustext, style)
-            Story.append(p)
-            bogustext = ("Categoria da notícia: %s." % article_in_db.category)
-            p = Paragraph(bogustext, style)
-            Story.append(p)
-            bogustext = ("Fonte da notícia: %s" % get_domain(url))
-            p = Paragraph(bogustext, style)
-            Story.append(p)
-            bogustext = ("Url da notícia: %s" % url)
-            p = Paragraph(bogustext, style)
-            Story.append(p)
-            Story.append(Spacer(1,0.2*inch))
-        doc.build(Story)
+                bogustext = ("Fonte da notícia: %s" % get_domain(url))
+                p = Paragraph(bogustext, style)
+                Story.append(p)
+                bogustext = ("Url da notícia: %s" % url)
+                p = Paragraph(bogustext, style)
+                Story.append(p)
+                Story.append(Spacer(1,0.2*inch))
 
+        doc.build(Story)
         fs = FileSystemStorage("/tmp")
         with fs.open("relatorioNOTICIAS%s.pdf" %time) as pdf:
             response = HttpResponse(pdf, content_type='application/pdf')

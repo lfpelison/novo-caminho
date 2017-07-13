@@ -25,8 +25,6 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from urlparse import urlparse
-import logging
-import traceback
 
 
 

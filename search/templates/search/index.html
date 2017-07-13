@@ -36,6 +36,7 @@
             {% endfor %}
             </ol>
 
+            {% if articles %}
             <center>
             <ul class="pagination">
               {% if page > 1 %}
@@ -47,6 +48,7 @@
               <li><a href="{% goto_page page|add:"3" %}">{{page|add:"3"}}</a></li>
             </ul>
             </center>
+            {% endif %}
         </div>
 
         <div class="col-xs-5" style="border-left:3px solid #e2e2e2;height:1430px"> <!-- div da direita -->

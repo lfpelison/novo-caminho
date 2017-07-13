@@ -62,7 +62,10 @@ def calculate_risk(entities):
     for entity in entities:
         articles = [art for art in Article.objects.all() if entity in art.entities]
         l=[art.risk for art in articles if art.risk != None]
-        risk[entity] = float(sum(l))/len(l)
+        if len(l) != 0:
+            risk[entity] = float(sum(l))/len(l)
+        else:
+            risk[entity] = 0
     return risk
 
 
